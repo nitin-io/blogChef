@@ -7,7 +7,7 @@ import protectedRoute from "../../utils/protectedRoute.js";
 
 const router = Router();
 
-router.get("/login", login).post("/login", loginHandler);
+router.route("/login").get(login).post(loginHandler);
 
 router.get("/logout", logoutHandler);
 
