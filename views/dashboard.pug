@@ -1,0 +1,16 @@
+doctype html
+
+html
+  head
+    link(rel="stylesheet" href="/css/style.css")
+    title BlogChef - Dashboard
+
+  body
+    .container
+      h1#admin-title BlogChef - Dashboard
+      #admin-nav
+        h3#user-name= "Welcome, " + user 
+        a(href="/admin/login" id="logOutBtn") Logout
+      #content 
+      include partials/postCard.pug
+

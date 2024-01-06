@@ -1,0 +1,14 @@
+doctype html
+
+html
+  head
+    link(href="/css/style.css" rel="stylesheet")
+
+body
+  .container
+    h1#admin-title Login to your account
+    #login-panel
+      form(method="POST" action="/admin/login" name="loginForm")
+        input(type="text" name="email" placeholder="E-mail")
+        input(type="password" name="password" placeholder="Password")
+        button(type="submit" name="loginBtn") Login
