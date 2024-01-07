@@ -3,6 +3,7 @@ import session from "express-session";
 import homeRoute from "./routes/home/index.js";
 import adminRoutes from "./routes/admin/index.js";
 import apiRoutes from "./routes/api/index.js";
+import connectDB from "./db/index.js";
 
 const app = express();
 app.use(express.static("public"));
@@ -32,6 +33,13 @@ app.use("/", homeRoute);
 app.use("/admin", adminRoutes);
 app.use("/api", apiRoutes);
 
-app.listen(3000, () => {
-  console.log("Server Running on Port 3000...");
-});
+Promise.all([connectDB(process.env.ATLAS_CONN_URI)])
+  .then(() => {
+    app.listen(3000, () => {
+      console.log("Server Running on Port 3000...");
+    });
+  })
+  .catch((error) => {
+    console.log(`Atlas Connection Error: ${error}`);
+    process.exit();
+  });
