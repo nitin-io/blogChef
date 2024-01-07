@@ -4,9 +4,14 @@ import homeRoute from "./routes/home/index.js";
 import adminRoutes from "./routes/admin/index.js";
 import apiRoutes from "./routes/api/index.js";
 import connectDB from "./db/index.js";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 app.use(express.static("public"));
+app.use(express.static(join(__dirname, "public", "client")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
@@ -35,7 +40,7 @@ app.use("/api", apiRoutes);
 
 Promise.all([connectDB(process.env.ATLAS_CONN_URI)])
   .then(() => {
-    app.listen(3000, () => {
+    app.listen(3001, () => {
       console.log("Server Running on Port 3000...");
     });
   })
