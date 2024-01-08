@@ -1,6 +1,7 @@
 export default function (req, res) {
   res.render("dashboard", {
-    user: req.session.user,
+    user: req.session.user.name,
+    lastLogIn: req.session.user.lastLogIn,
     posts: [
       {
         id: 1,

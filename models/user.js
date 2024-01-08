@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import bcrypt from "bcrypt";
 
 const userSchema = new Schema({
   name: {
@@ -27,6 +28,41 @@ const userSchema = new Schema({
     default: false,
   },
 });
+
+// Presave middleware hook
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+
+  this.password = bcrypt.hashSync(this.password, 10);
+  next();
+});
+
+userSchema.methods.checkPassword = function (password) {
+  try {
+    const match = bcrypt.compareSync(password, this.password);
+
+    if (match) {
+      return Promise.resolve();
+    }
+
+    return Promise.reject({
+      error: { code: 400, message: "Incorrect Password!" },
+    });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+userSchema.methods.updateLogIn = function () {
+  return this.model("User").findOneAndUpdate(
+    { email: this.email },
+    {
+      lastLogIn: new Date(),
+    }
+  );
+};
 
 const User = model("User", userSchema);
 

@@ -1,0 +1,15 @@
+doctype html
+
+html
+  head
+    link(href="/css/style.css" rel="stylesheet")
+
+body
+  .container
+    h1#admin-title Sign up for Moderator Account
+    #login-panel
+      form(method="POST" action="/admin/signup" name="loginForm")
+        input(type="text" name="name" placeholder="Full Name")
+        input(type="text" name="email" placeholder="E-mail")
+        input(type="password" name="password" placeholder="Password")
+        button(type="submit" name="loginBtn") Sign Up

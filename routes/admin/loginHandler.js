@@ -1,9 +1,17 @@
-export default function (req, res) {
+import { loginAdmin } from "../../controllers/user.js";
+
+export default async function (req, res) {
   const { email, password } = req.body;
-  if (email === "nitin@google.com" && password === "dounuts") {
-    req.session.user = "Nitin Chaudhary";
+  try {
+    const user = await loginAdmin({ email, password });
+    req.session.user = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      lastLogIn: user.lastLogIn,
+    };
     res.redirect("/admin/dashboard");
-  } else {
+  } catch {
     res.redirect("/admin/login");
   }
 }

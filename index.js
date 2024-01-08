@@ -6,6 +6,7 @@ import apiRoutes from "./routes/api/index.js";
 import connectDB from "./db/index.js";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import morgan from "morgan";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -14,6 +15,7 @@ app.use(express.static("public"));
 app.use(express.static(join(__dirname, "public", "client")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(morgan("dev"));
 app.use(
   "/admin",
   session({
@@ -34,9 +36,9 @@ app.use(
 
 app.set("view engine", "pug");
 
-app.use("/", homeRoute);
 app.use("/admin", adminRoutes);
 app.use("/api", apiRoutes);
+app.use("/", homeRoute);
 
 Promise.all([connectDB(process.env.ATLAS_CONN_URI)])
   .then(() => {
