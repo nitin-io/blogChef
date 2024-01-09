@@ -6,6 +6,7 @@ import getPost from "./get-post.js";
 import storePost from "./store-post.js";
 import deletePost from "./delete-post.js";
 import protectedRoute from "./protectedRoute.js";
+import verify from "../../utils/verify.js";
 
 const router = Router();
 
@@ -17,5 +18,6 @@ router
   .get(getPost)
   .post(protectedRoute, storePost)
   .delete(deletePost);
+router.post("/verify", verify);
 
 export default router;

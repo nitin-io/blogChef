@@ -1,4 +1,25 @@
+import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+
+const sign = (obj) => {
+  return new Promise((resolve, reject) => {
+    jwt.sign(obj, process.env.JWT_SECRET, (error, token) => {
+      if (error) {
+        return reject(error);
+      }
+
+      return resolve(token);
+    });
+  });
+};
+
+const verify = async (token) =>
+  new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.JWT_SECRET, (error) => {
+      if (error) return reject();
+      return resolve();
+    });
+  });
 
 export const signupAdmin = async ({ name, email, password }) => {
   try {
@@ -20,6 +41,60 @@ export const loginAdmin = async ({ email, password }) => {
     await user.checkPassword(password);
     await user.updateLogIn();
     return user;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const signupUser = async ({ name, email, password }) => {
+  try {
+    const isUserExist = await User.findOne({ email });
+
+    if (isUserExist) {
+      throw "User is already exist with this email";
+    }
+    const user = await User.create({ name, email, password });
+    const token = await sign({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      lastLogIn: user.lastLogIn,
+    });
+    return { user, token };
+  } catch (error) {
+    return error;
+  }
+};
+
+export const loginUser = async ({ email, password }) => {
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      await user.checkPassword(password);
+      await user.updateLogIn();
+      const token = await sign({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      });
+      return { user, token };
+    }
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const verifyToken = async (token) => {
+  try {
+    const payload = jwt.decode(token);
+    const user = await User.findOne({ email: payload.email });
+
+    if (!user) {
+      throw new Error("Unauthorized!");
+    }
+
+    return;
   } catch (error) {
     return error;
   }
