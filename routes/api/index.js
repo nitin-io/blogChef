@@ -7,15 +7,19 @@ import storePost from "./store-post.js";
 import deletePost from "./delete-post.js";
 import protectApi from "../../utils/protectApi.js";
 import verify from "../../utils/verify.js";
+import {
+  servePostFromCache,
+  servePostsFromCache,
+} from "../../controllers/cache.js";
 
 const router = Router();
 
-router.get("/posts", getPosts);
+router.get("/posts", servePostsFromCache, getPosts);
 router.post("/login", loginUser);
 router.post("/signup", signupUser);
 router
   .route("/post/:postId?")
-  .get(getPost)
+  .get(servePostFromCache, getPost)
   .post(protectApi, storePost)
   .delete(protectApi, deletePost);
 router.post("/verify", verify);
