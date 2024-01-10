@@ -1,7 +1,9 @@
-export default function (req, res, next) {
-  if (req.session.user) {
+import { verifyUser } from "../controllers/user.js";
+
+export default async (req, res, next) => {
+  if (req.session.user && (await verifyUser(req.session.user.email))) {
     return next();
   }
 
   res.redirect("/admin/login");
-}
+};

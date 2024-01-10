@@ -55,7 +55,10 @@ export const signupUser = async ({ name, email, password }) => {
       email: user.email,
       lastLogIn: user.lastLogIn,
     });
-    return { user, token };
+    return {
+      user: { id: user._id, name: user.name, lastLogIn: user.lastLogIn },
+      token,
+    };
   } catch (error) {
     return error;
   }
@@ -97,3 +100,14 @@ export const verifyToken = async (token) => {
     return error;
   }
 };
+
+export const verifyUser = (email) =>
+  new Promise((resolve, reject) => {
+    try {
+      const user = User.findOne({ email });
+
+      if (user) return resolve(true);
+    } catch (error) {
+      return reject(false);
+    }
+  });

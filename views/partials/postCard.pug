@@ -1,9 +1,11 @@
 each post in posts
   .post-card
     h2=post.title 
-    h3="by " + post.author 
+    h3="by " + post.user.name
     p=post.content
-    form(method="POST" action="/admin/approve")
+    form(method="POST" action="/admin/moderate")
       input(type="hidden" name="postId" value=post.id)
-      button.adminBtn(value="approve") Approve 
-      button.adminBtn(value="decline") Decline
+      button.adminBtn(name="task" value="approve") Approve 
+      button.adminBtn(name="task" value="decline") Decline
+else
+  p No posts to moderate :)

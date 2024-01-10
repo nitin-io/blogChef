@@ -5,6 +5,7 @@ import loginHandler from "./loginHandler.js";
 import logoutHandler from "./logoutHandler.js";
 import protectedRoute from "../../utils/protectedRoute.js";
 import signupHandler from "./signupHandler.js";
+import moderatePost from "./moderate-post.js";
 
 const router = Router();
 
@@ -18,5 +19,7 @@ router
 router.get("/logout", logoutHandler);
 
 router.get("/dashboard", protectedRoute, dashboard);
+
+router.post("/moderate", moderatePost);
 
 export default router;
