@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+const { ObjectId } = Schema.Types;
 
 const postSchema = new Schema({
   title: {
@@ -9,14 +10,12 @@ const postSchema = new Schema({
     type: String,
     required: true,
   },
-  author: {
+  user: {
     type: ObjectId,
     ref: "User",
+    required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  createdAt: { type: Date, default: Date.now },
   isApproved: {
     type: Boolean,
     default: true,

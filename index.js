@@ -42,7 +42,7 @@ app.use("/", homeRoute);
 
 Promise.all([connectDB(process.env.ATLAS_CONN_URI)])
   .then(() => {
-    app.listen(3001, () => {
+    app.listen(3000, () => {
       console.log("Server Running on Port 3000...");
     });
   })

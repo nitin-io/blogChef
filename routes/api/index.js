@@ -5,7 +5,7 @@ import signupUser from "./signup-user.js";
 import getPost from "./get-post.js";
 import storePost from "./store-post.js";
 import deletePost from "./delete-post.js";
-import protectedRoute from "./protectedRoute.js";
+import protectApi from "../../utils/protectApi.js";
 import verify from "../../utils/verify.js";
 
 const router = Router();
@@ -16,8 +16,8 @@ router.post("/signup", signupUser);
 router
   .route("/post/:postId?")
   .get(getPost)
-  .post(protectedRoute, storePost)
-  .delete(deletePost);
+  .post(protectApi, storePost)
+  .delete(protectApi, deletePost);
 router.post("/verify", verify);
 
 export default router;

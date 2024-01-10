@@ -48,11 +48,6 @@ export const loginAdmin = async ({ email, password }) => {
 
 export const signupUser = async ({ name, email, password }) => {
   try {
-    const isUserExist = await User.findOne({ email });
-
-    if (isUserExist) {
-      throw "User is already exist with this email";
-    }
     const user = await User.create({ name, email, password });
     const token = await sign({
       id: user._id,
@@ -77,7 +72,10 @@ export const loginUser = async ({ email, password }) => {
         name: user.name,
         email: user.email,
       });
-      return { user, token };
+      return {
+        user: { id: user._id, name: user.name, lastLogIn: user.lastLogIn },
+        token,
+      };
     }
   } catch (error) {
     console.log(error);
@@ -94,7 +92,7 @@ export const verifyToken = async (token) => {
       throw new Error("Unauthorized!");
     }
 
-    return;
+    await verify(token);
   } catch (error) {
     return error;
   }
