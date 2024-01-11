@@ -1,11 +1,13 @@
-import { createClient } from "redis";
+import Redis from "ioredis";
 
-const redisClient = createClient(process.env.REDIS_URL);
+const redisClient = new Redis(process.env.REDIS_URL);
+
+redisClient.on("connect", () => {
+  console.log("Redis Connected!");
+});
 
 redisClient.on("error", (error) => {
   console.log(error);
 });
-
-await redisClient.connect();
 
 export default redisClient;

@@ -7,10 +7,13 @@ import connectDB from "./db/index.js";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import morgan from "morgan";
+import helmet from "helmet";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
+
+app.use(helmet());
 app.use(express.static("public"));
 app.use(express.static(join(__dirname, "public", "client")));
 app.use(express.urlencoded({ extended: true }));
