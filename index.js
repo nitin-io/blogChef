@@ -1,5 +1,5 @@
 import express from "express";
-import session from "express-session";
+import session from "./session/index.js";
 import homeRoute from "./routes/home/index.js";
 import adminRoutes from "./routes/admin/index.js";
 import apiRoutes from "./routes/api/index.js";
@@ -19,23 +19,7 @@ app.use(express.static(join(__dirname, "public", "client")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(
-  "/admin",
-  session({
-    name: "sessId",
-    resave: false,
-    saveUninitialized: true,
-    secret:
-      app.get("env") === "development"
-        ? "thisIsASecretKey"
-        : process.env.SESSION_SECRET,
-    cookie: {
-      httpOnly: true,
-      maxAge: 18000000,
-      secure: app.get("env") === "production",
-    },
-  })
-);
+app.use("/admin", session(app));
 
 app.set("view engine", "pug");
 
