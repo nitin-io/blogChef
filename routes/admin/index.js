@@ -1,7 +1,6 @@
 import { Router } from "express";
 import dashboard from "./dashboard.js";
-import login from "./login.js";
-import loginHandler from "./loginHandler.js";
+import login from "./loginHandler.js";
 import logoutHandler from "./logoutHandler.js";
 import protectedRoute, { csrfProtection } from "../../utils/protectedRoute.js";
 import signupHandler from "./signupHandler.js";
@@ -15,8 +14,10 @@ const router = Router();
 
 router
   .route("/login")
-  .get(csrfProtection, login)
-  .post(csrfProtection, loginAdminValidation, loginHandler);
+  .get(csrfProtection, (req, res) =>
+    res.render("login", { csrfToken: req.csrfToken() })
+  )
+  .post(csrfProtection, loginAdminValidation, login);
 
 router
   .route("/signup")
@@ -25,7 +26,7 @@ router
 
 router.get("/logout", logoutHandler);
 
-router.get("/dashboard", protectedRoute, dashboard);
+router.get("/dashboard", protectedRoute("/admin/login"), dashboard);
 
 router.post("/moderate", moderatePost);
 
